@@ -60,6 +60,11 @@ auto myVariableSizedArray{ make_unique<int[]>(10) };
 
 // 커스텀 제거자
 int* my_alloc(int value) { return new int{ value }; }
+void my_free(int* p) { delete p; }
+
+auto mySimpleSmartPtr1{ make_shared<Simple>() };
+
+shared_ptr<int> myIntSmartPtr{ my_alloc(42), my_free };
 
 int main()
 {
