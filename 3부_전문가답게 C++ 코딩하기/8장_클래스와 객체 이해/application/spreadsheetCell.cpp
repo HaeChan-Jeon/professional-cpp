@@ -2,6 +2,21 @@ module spreadsheet_cell;
 import <charconv>;
 using namespace std;
 
+SpreadsheetCell::SpreadsheetCell(double initialValue)
+	: m_value { initialValue }
+{
+}
+
+SpreadsheetCell::SpreadsheetCell(string_view initialValue)
+{
+	setString(initialValue);
+}
+
+SpreadsheetCell::SpreadsheetCell(const SpreadsheetCell& src)
+	: m_value { src.m_value }
+{
+}
+
 void SpreadsheetCell::setValue(double value)
 {
 	m_value = value;

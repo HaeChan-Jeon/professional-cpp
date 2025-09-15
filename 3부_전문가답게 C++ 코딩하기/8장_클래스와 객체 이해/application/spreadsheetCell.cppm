@@ -4,6 +4,10 @@ import <string_view>;
 export class SpreadsheetCell
 {
 	public:
+		SpreadsheetCell() = default;
+		SpreadsheetCell(double initialValue);
+		SpreadsheetCell(std::string_view initialValue);
+		SpreadsheetCell(const SpreadsheetCell& src);
 		void setValue(double value);
 		double getValue() const;
 
