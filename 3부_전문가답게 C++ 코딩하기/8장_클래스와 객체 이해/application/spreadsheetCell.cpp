@@ -1,6 +1,12 @@
 module spreadsheet_cell;
 import <charconv>;
+import <iostream>;
 using namespace std;
+
+SpreadsheetCell::~SpreadsheetCell()
+{
+	cout << "Destructor called." << endl;
+}
 
 SpreadsheetCell::SpreadsheetCell(double initialValue)
 	: m_value { initialValue }
