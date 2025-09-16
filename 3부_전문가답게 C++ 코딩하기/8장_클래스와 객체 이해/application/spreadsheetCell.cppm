@@ -4,6 +4,8 @@ import <string_view>;
 export class SpreadsheetCell
 {
 	public:
+		SpreadsheetCell& operator=(const SpreadsheetCell& rhs);
+
 		~SpreadsheetCell();
 		
 		SpreadsheetCell() = default;

@@ -3,6 +3,16 @@ import <charconv>;
 import <iostream>;
 using namespace std;
 
+SpreadsheetCell& SpreadsheetCell::operator=(const SpreadsheetCell& rhs)
+{
+	if (this == &rhs)
+	{
+		return *this;
+	}
+	m_value = rhs.m_value;
+	return *this;
+}
+
 SpreadsheetCell::~SpreadsheetCell()
 {
 	cout << "Destructor called." << endl;
