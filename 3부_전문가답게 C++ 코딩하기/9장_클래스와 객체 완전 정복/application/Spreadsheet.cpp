@@ -18,22 +18,24 @@ Spreadsheet::Spreadsheet(size_t width, size_t height)
 
 void Spreadsheet::setCellAt(size_t x, size_t y, const SpreadsheetCell& cell)
 {
-	if (!inRange(x, m_width)) {
-		throw out_of_range{ format("{} must be less than {}.", x, m_width) };
-	}
-	if (!inRange(y, m_height)) {
-		throw out_of_range{ format("{} must be less than {}.", y, m_height) };
-	}
+	verifyCoordinate(x, y);
 	m_cells[x][y] = cell;
 }
 
 SpreadsheetCell& Spreadsheet::getCellAt(size_t x, size_t y)
 {
-	if (!inRange(x, m_width)) {
+	verifyCoordinate(x, y);
+	return m_cells[x][y];
+}
+
+void Spreadsheet::verifyCoordinate(size_t x, size_t y) const
+{
+	if (x >= m_width)
+	{
 		throw out_of_range{ format("{} must be less than {}.", x, m_width) };
 	}
-	if (!inRange(y, m_height)) {
+	if (y >= m_height)
+	{
 		throw out_of_range{ format("{} must be less than {}.", y, m_height) };
 	}
-	return m_cells[x][y];
 }
