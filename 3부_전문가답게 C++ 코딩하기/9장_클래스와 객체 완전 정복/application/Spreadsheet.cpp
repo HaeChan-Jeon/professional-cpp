@@ -39,3 +39,13 @@ void Spreadsheet::verifyCoordinate(size_t x, size_t y) const
 		throw out_of_range{ format("{} must be less than {}.", y, m_height) };
 	}
 }
+
+Spreadsheet::~Spreadsheet()
+{
+	for (size_t i{ 0 }; i < m_width; i++)
+	{
+		delete[] m_cells[i];
+	}
+	delete[] m_cells;
+	m_cells = nullptr;
+}

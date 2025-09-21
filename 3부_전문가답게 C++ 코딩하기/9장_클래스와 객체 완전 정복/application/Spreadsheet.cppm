@@ -8,6 +8,7 @@ export class Spreadsheet
 {
 	public:
 		Spreadsheet(size_t width, size_t height);
+		~Spreadsheet();
 		void setCellAt(size_t x, size_t y, const SpreadsheetCell& cell);
 		SpreadsheetCell& getCellAt(size_t x, size_t y);
 		void verifyCoordinate(size_t x, size_t y) const;
