@@ -7,6 +7,8 @@ export import spreadsheet_cell;
 export class Spreadsheet
 {
 	public:
+		Spreadsheet& operator=(const Spreadsheet& rhs);
+		void swap(Spreadsheet& other) noexcept;
 		Spreadsheet(const Spreadsheet& src);
 		Spreadsheet(size_t width, size_t height);
 		~Spreadsheet();
@@ -19,3 +21,4 @@ export class Spreadsheet
 		size_t m_height{ 0 };
 		SpreadsheetCell** m_cells{ nullptr };
 };
+export void swap(Spreadsheet& first, Spreadsheet& second) noexcept;

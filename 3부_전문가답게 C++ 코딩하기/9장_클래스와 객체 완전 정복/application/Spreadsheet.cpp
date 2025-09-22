@@ -3,8 +3,28 @@ module;
 
 module spreadsheet;
 import <format>;
+import <utility>;
 
 using namespace std;
+
+Spreadsheet& Spreadsheet::operator=(const Spreadsheet& rhs)
+{
+	Spreadsheet temp{ rhs };	// 모든 작업을 임시 인스턴스에서 처리한다.
+	swap(temp);					// 익셉션을 던지지 않는 연산에서만 작업을 처리한다.
+	return *this;
+}
+
+void Spreadsheet::swap(Spreadsheet& other) noexcept
+{
+	std::swap(m_width, other.m_width);
+	std::swap(m_height, other.m_height);
+	std::swap(m_cells, other.m_cells);
+}
+
+void swap(Spreadsheet& first, Spreadsheet& second) noexcept
+{
+	first.swap(second);
+}
 
 Spreadsheet::Spreadsheet(const Spreadsheet& src)
 	: Spreadsheet{ src.m_width, src.m_height }
