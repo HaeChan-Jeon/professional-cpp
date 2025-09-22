@@ -6,6 +6,15 @@ import <format>;
 
 using namespace std;
 
+Spreadsheet::Spreadsheet(const Spreadsheet& src)
+	: Spreadsheet{ src.m_width, src.m_height }
+{
+	for (size_t i{ 0 }; i < m_width; i++)	{
+		for (size_t j{ 0 }; j < m_height; j++) {
+			m_cells[i][j] = src.m_cells[i][j];
+		}
+	}
+}
 
 Spreadsheet::Spreadsheet(size_t width, size_t height)
 	: m_width { width }, m_height {height}

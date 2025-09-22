@@ -7,6 +7,7 @@ export import spreadsheet_cell;
 export class Spreadsheet
 {
 	public:
+		Spreadsheet(const Spreadsheet& src);
 		Spreadsheet(size_t width, size_t height);
 		~Spreadsheet();
 		void setCellAt(size_t x, size_t y, const SpreadsheetCell& cell);
