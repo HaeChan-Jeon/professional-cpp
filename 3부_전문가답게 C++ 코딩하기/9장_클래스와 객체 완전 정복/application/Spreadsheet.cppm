@@ -7,6 +7,8 @@ export import spreadsheet_cell;
 export class Spreadsheet
 {
 	public:
+		Spreadsheet(Spreadsheet&& src) noexcept; // 이동 생성자
+		Spreadsheet& operator=(Spreadsheet&& rhs) noexcept; // 이동 대입 연산자
 		Spreadsheet(size_t width, size_t height);
 		Spreadsheet(const Spreadsheet& src);
 		~Spreadsheet();
@@ -16,6 +18,8 @@ export class Spreadsheet
 		SpreadsheetCell& getCellAt(size_t x, size_t y);
 		void verifyCoordinate(size_t x, size_t y) const;
 	private:
+		void cleanup() noexcept;
+		void moveFrom(Spreadsheet& src) noexcept;
 		bool inRange(size_t value, size_t upper) const;
 		size_t m_width{ 0 };
 		size_t m_height{ 0 };
