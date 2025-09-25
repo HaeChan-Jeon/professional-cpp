@@ -7,45 +7,16 @@ import <utility>;
 
 using namespace std;
 
-void Spreadsheet::cleanup() noexcept
-{
-	for (size_t i{0}; i < m_width; i++)	{
-		delete[] m_cells[i];
-	}delete[] m_cells;
-	m_cells = nullptr;
-	m_width = m_height = 0;
-}
-
-void Spreadsheet::moveFrom(Spreadsheet& src) noexcept
-{
-	// 데이터에 대한 얕은 복제
-	m_width = src.m_width;
-	m_height = src.m_height;
-	m_cells = src.m_cells;
-
-	// 소유권이 이전되었기 때문에 소스 객체를 리셋한다.
-	src.m_width = 0;
-	src.m_height = 0;
-	src.m_cells = nullptr;
-}
-
 // 이동 생성자
 Spreadsheet::Spreadsheet(Spreadsheet&& src) noexcept
 {
-	moveFrom(src);
+	swap(*this, src);
 }
 
 // 이동 대입 연산자
 Spreadsheet& Spreadsheet::operator=(Spreadsheet&& rhs) noexcept
 {
-	// 자기 자신을 대입하는지 확인한다.
-	if (this == &rhs) {
-		return *this;
-	}
-
-	// 예전 메모리를 해제한다.
-	cleanup();
-	moveFrom(rhs);
+	swap(*this, rhs);
 	return *this;
 }
 
@@ -63,7 +34,7 @@ void Spreadsheet::swap(Spreadsheet& other) noexcept
 	std::swap(m_cells, other.m_cells);
 }
 
-void swap(Spreadsheet& first, Spreadsheet& second) noexcept
+void Spreadsheet::swap(Spreadsheet& first, Spreadsheet& second) noexcept
 {
 	first.swap(second);
 }
@@ -113,10 +84,10 @@ void Spreadsheet::verifyCoordinate(size_t x, size_t y) const
 
 Spreadsheet::~Spreadsheet()
 {
-	for (size_t i{ 0 }; i < m_width; i++)
-	{
+	for (size_t i{ 0 }; i < m_width; i++) {
 		delete[] m_cells[i];
 	}
 	delete[] m_cells;
 	m_cells = nullptr;
+	m_width = m_height = 0;
 }

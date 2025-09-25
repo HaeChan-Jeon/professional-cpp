@@ -1,18 +1,26 @@
-﻿module spreadsheet_cell;
+﻿module spreadsheet;
 import <iostream>;
+import <vector>;
 using namespace std;
+
+
+Spreadsheet createobject()
+{
+	return Spreadsheet{ 3, 2 };
+}
 
 int main()
 {
-	SpreadsheetCell myCell(5), anotherCell(4);
-	cout << "cell 1: " << myCell.getValue() << endl;
-	cout << "cell 2: " << anotherCell.getValue() << endl;
+	vector<Spreadsheet> vec;
+	for (size_t i{ 0 }; i < 2; ++i)	{
+		cout << "Iteration " << i << endl;
+		vec.push_back(Spreadsheet{ 100, 100 });
+		cout << endl;
+	}
 
-	auto myCellp{ make_unique<SpreadsheetCell>(4) };
-	//SpreadsheetCell* myCellp{ new SpreadsheetCell {} };
-	myCellp->setValue(3.7);
-	cout << "cell 1: " << myCellp->getValue() <<
-		" " << myCellp->getString() << endl;
-	//delete myCellp;
-	//myCellp = nullptr;
+	Spreadsheet s{ 2, 3 };
+	s = createobject();
+
+	Spreadsheet s2{ 5, 6 };
+	s2 = s;
 }

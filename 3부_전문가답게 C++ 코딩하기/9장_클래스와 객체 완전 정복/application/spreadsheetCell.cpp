@@ -15,7 +15,7 @@ SpreadsheetCell& SpreadsheetCell::operator=(const SpreadsheetCell& rhs)
 
 SpreadsheetCell::~SpreadsheetCell()
 {
-	cout << "Destructor called." << endl;
+	//cout << "Destructor called." << endl;
 }
 
 SpreadsheetCell::SpreadsheetCell(double initialValue)
