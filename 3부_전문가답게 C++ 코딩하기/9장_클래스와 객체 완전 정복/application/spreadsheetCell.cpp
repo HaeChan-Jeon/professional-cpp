@@ -25,7 +25,7 @@ SpreadsheetCell::SpreadsheetCell(double initialValue)
 
 SpreadsheetCell::SpreadsheetCell(string_view initialValue)
 {
-	setString(initialValue);
+	set(initialValue);
 }
 
 SpreadsheetCell::SpreadsheetCell(const SpreadsheetCell& src)
@@ -33,32 +33,34 @@ SpreadsheetCell::SpreadsheetCell(const SpreadsheetCell& src)
 {
 }
 
-void SpreadsheetCell::setValue(double value)
+void SpreadsheetCell::set(double value)
 {
 	m_value = value;
 }
 
 double SpreadsheetCell::getValue() const
 {
+	m_numAccesses++;
 	return m_value;
 }
 
-void SpreadsheetCell::setString(string_view value)
+void SpreadsheetCell::set(string_view value)
 {
 	m_value = stringToDouble(value);
 }
 
 string SpreadsheetCell::getString() const
 {
+	m_numAccesses++;
 	return doubleToString(m_value);
 }
 
-string SpreadsheetCell::doubleToString(double value) const
+string SpreadsheetCell::doubleToString(double value)
 {
 	return to_string(value);
 }
 
-double SpreadsheetCell::stringToDouble(string_view value) const
+double SpreadsheetCell::stringToDouble(string_view value)
 {
 	double number{ 0 };
 	from_chars(value.data(), value.data() + value.size(), number);

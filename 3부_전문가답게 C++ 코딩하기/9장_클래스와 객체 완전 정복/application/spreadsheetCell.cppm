@@ -12,13 +12,15 @@ export class SpreadsheetCell
 		SpreadsheetCell(double initialValue);
 		SpreadsheetCell(std::string_view initialValue);
 		SpreadsheetCell(const SpreadsheetCell& src);
-		void setValue(double value);
+		void set(double value);
+		void set(int) = delete;
 		double getValue() const;
 
-		void setString(std::string_view inString);
+		void set(std::string_view inString);
 		std::string getString() const;
 	private:
-		std::string doubleToString(double value) const;
-		double stringToDouble(std::string_view inString) const;
+		static std::string doubleToString(double value);
+		static double stringToDouble(std::string_view inString);
 		double m_value{ 0 };
+		mutable size_t m_numAccesses{ 0 };
 };
