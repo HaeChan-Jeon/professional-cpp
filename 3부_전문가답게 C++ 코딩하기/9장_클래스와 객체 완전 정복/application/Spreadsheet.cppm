@@ -9,7 +9,7 @@ export class Spreadsheet
 	public:
 		Spreadsheet(Spreadsheet&& src) noexcept; // 이동 생성자
 		Spreadsheet& operator=(Spreadsheet&& rhs) noexcept; // 이동 대입 연산자
-		Spreadsheet(size_t width, size_t height);
+		Spreadsheet(size_t width = 100, size_t height = 100);
 		Spreadsheet(const Spreadsheet& src);
 		~Spreadsheet();
 		Spreadsheet& operator=(const Spreadsheet& rhs);
