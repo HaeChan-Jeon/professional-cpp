@@ -1,98 +1,127 @@
 module;
-#include <stdexcept>
+#include <cstddef>
 
 module spreadsheet;
-import <format>;
+
 import <utility>;
+import <stdexcept>;
+import <format>;
 import <algorithm>;
 
 using namespace std;
 
+// Impl 정의
+class Spreadsheet::Impl {
+public:
+    Impl(const SpreadsheetApplication& theApp, size_t width, size_t height)
+        : m_id{ ms_counter++ }
+        , m_width{ min(width, Spreadsheet::MaxWidth) }
+        , m_height{ min(height, Spreadsheet::MaxHeight) }
+        , m_theApp{ theApp }
+    {
+        m_cells = new SpreadsheetCell * [m_width];
+        for (size_t i{ 0 }; i < m_width; i++) {
+            m_cells[i] = new SpreadsheetCell[m_height];
+        }
+    }
+
+    Impl(const Impl& src)
+        : m_id{ ms_counter++ }
+        , m_width{ src.m_width }
+        , m_height{ src.m_height }
+        , m_theApp{ src.m_theApp }
+    {
+        m_cells = new SpreadsheetCell * [m_width];
+        for (size_t i{ 0 }; i < m_width; i++) {
+            m_cells[i] = new SpreadsheetCell[m_height];
+            for (size_t j{ 0 }; j < m_height; j++) {
+                m_cells[i][j] = src.m_cells[i][j];
+            }
+        }
+    }
+
+    ~Impl() {
+        for (size_t i{ 0 }; i < m_width; i++) {
+            delete[] m_cells[i];
+        }
+        delete[] m_cells;
+    }
+
+    void setCellAt(size_t x, size_t y, const SpreadsheetCell& cell) {
+        if (x >= m_width || y >= m_height) {
+            throw out_of_range{ format("({}, {}) out of range", x, y) };
+        }
+        m_cells[x][y] = cell;
+    }
+
+    SpreadsheetCell& getCellAt(size_t x, size_t y) {
+        if (x >= m_width || y >= m_height) {
+            throw out_of_range{ format("({}, {}) out of range", x, y) };
+        }
+        return m_cells[x][y];
+    }
+
+    size_t getId() const { return m_id; }
+
+private:
+    static inline size_t ms_counter{ 0 };
+    const size_t m_id;
+    size_t m_width;
+    size_t m_height;
+    SpreadsheetCell** m_cells{ nullptr };
+    const SpreadsheetApplication& m_theApp;
+};
+
+// 이동 생성자
+Spreadsheet::Spreadsheet(Spreadsheet&& other) noexcept = default;
+
 // 이동 대입 연산자
-Spreadsheet& Spreadsheet::operator=(Spreadsheet&& rhs) noexcept
-{
-	swap(*this, rhs);
-	return *this;
+Spreadsheet& Spreadsheet::operator=(Spreadsheet&& rhs) noexcept {
+    this->swap(rhs);
+    return *this;
 }
 
-Spreadsheet& Spreadsheet::operator=(const Spreadsheet& rhs)
-{
-	Spreadsheet temp{ rhs };	// 모든 작업을 임시 인스턴스에서 처리한다.
-	swap(temp);					// 익셉션을 던지지 않는 연산에서만 작업을 처리한다.
-	return *this;
+// 복사 생성자
+Spreadsheet::Spreadsheet(const Spreadsheet& src) {
+    m_impl = std::make_unique<Impl>(*src.m_impl);
 }
 
-void Spreadsheet::swap(Spreadsheet& other) noexcept
-{
-	std::swap(m_width, other.m_width);
-	std::swap(m_height, other.m_height);
-	std::swap(m_cells, other.m_cells);
+// 복사 대입 연산자
+Spreadsheet& Spreadsheet::operator=(const Spreadsheet& rhs) {
+    if (this != &rhs) {
+        m_impl = std::make_unique<Impl>(*rhs.m_impl);
+    }
+    return *this;
 }
 
-void Spreadsheet::swap(Spreadsheet& first, Spreadsheet& second) noexcept
-{
-	first.swap(second);
+// 생성자
+Spreadsheet::Spreadsheet(const SpreadsheetApplication& theApp,
+    size_t width, size_t height) {
+    m_impl = std::make_unique<Impl>(theApp, width, height);
 }
 
-Spreadsheet::Spreadsheet(const Spreadsheet& src)
-	: Spreadsheet{ src.m_width, src.m_height, src.m_theApp }
-{
-	for (size_t i{ 0 }; i < m_width; i++)	{
-		for (size_t j{ 0 }; j < m_height; j++) {
-			m_cells[i][j] = src.m_cells[i][j];
-		}
-	}
+// 멤버 함수들
+void Spreadsheet::setCellAt(size_t x, size_t y, const SpreadsheetCell& cell) {
+    m_impl->setCellAt(x, y, cell);
 }
 
-Spreadsheet::Spreadsheet(size_t width, size_t height,
-	const SpreadsheetApplication& theApp)
-	: m_id(ms_counter++)
-	, m_width{ min(width, MaxWidth) }
-	, m_height{ min(height, MaxHeight) }
-	, m_theApp {theApp}
-{
-	m_cells = new SpreadsheetCell * [m_width];
-	for (size_t i{ 0 }; i < m_width; i++) {
-		m_cells[i] = new SpreadsheetCell[m_height];
-	}
+SpreadsheetCell& Spreadsheet::getCellAt(size_t x, size_t y) {
+    return m_impl->getCellAt(x, y);
 }
 
-void Spreadsheet::setCellAt(size_t x, size_t y, const SpreadsheetCell& cell)
-{
-	verifyCoordinate(x, y);
-	m_cells[x][y] = cell;
+size_t Spreadsheet::getId() const {
+    return m_impl->getId();
 }
 
-const SpreadsheetCell& Spreadsheet::getCellAt(size_t x, size_t y) const
-{
-	verifyCoordinate(x, y);
-	return m_cells[x][y];
+// swap 멤버
+void Spreadsheet::swap(Spreadsheet& other) noexcept {
+    std::swap(m_impl, other.m_impl);
 }
 
-SpreadsheetCell& Spreadsheet::getCellAt(size_t x, size_t y)
-{
-	return const_cast<SpreadsheetCell&>(as_const(*this).getCellAt(x, y));
+// 전역 swap
+void swap(Spreadsheet& first, Spreadsheet& second) noexcept {
+    first.swap(second);
 }
 
-
-void Spreadsheet::verifyCoordinate(size_t x, size_t y) const
-{
-	if (x >= m_width)
-	{
-		throw out_of_range{ format("{} must be less than {}.", x, m_width) };
-	}
-	if (y >= m_height)
-	{
-		throw out_of_range{ format("{} must be less than {}.", y, m_height) };
-	}
-}
-
-Spreadsheet::~Spreadsheet()
-{
-	for (size_t i{ 0 }; i < m_width; i++) {
-		delete[] m_cells[i];
-	}
-	delete[] m_cells;
-	m_cells = nullptr;
-	m_width = m_height = 0;
-}
+// 소멸자
+Spreadsheet::~Spreadsheet() = default;

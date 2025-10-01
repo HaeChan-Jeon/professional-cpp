@@ -7,3 +7,5 @@ import <format>;
 import <utility>;
 import <vector>;
 import <algorithm>;
+import <memory>;
+import <stdexcept>;
