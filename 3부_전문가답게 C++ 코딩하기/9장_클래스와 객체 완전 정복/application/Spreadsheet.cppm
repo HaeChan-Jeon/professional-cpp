@@ -4,12 +4,14 @@ module;
 export module spreadsheet;
 export import spreadsheet_cell;
 
+export class SpreadsheetApplication{};
+
 export class Spreadsheet
 {
 	public:
-		Spreadsheet(Spreadsheet&& src) noexcept; // 이동 생성자
 		Spreadsheet& operator=(Spreadsheet&& rhs) noexcept; // 이동 대입 연산자
-		Spreadsheet(size_t width = 100, size_t height = 100);
+		Spreadsheet(size_t width, size_t height,
+			const SpreadsheetApplication& theApp);
 		Spreadsheet(const Spreadsheet& src);
 		~Spreadsheet();
 		Spreadsheet& operator=(const Spreadsheet& rhs);
@@ -19,10 +21,13 @@ export class Spreadsheet
 		SpreadsheetCell& getCellAt(size_t x, size_t y);
 		const SpreadsheetCell& getCellAt(size_t x, size_t y) const;
 		void verifyCoordinate(size_t x, size_t y) const;
+		static const size_t MaxHeight{ 100 };
+		static const size_t MaxWidth{ 100 };
 	private:
-		bool inRange(size_t value, size_t upper) const;
 		size_t m_width{ 0 };
 		size_t m_height{ 0 };
 		SpreadsheetCell** m_cells{ nullptr };
+		static inline size_t ms_counter{ 0 };
+		const size_t m_id{ 0 };
+		const SpreadsheetApplication& m_theApp;
 };
-export void swap(Spreadsheet& first, Spreadsheet& second) noexcept;

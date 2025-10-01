@@ -4,14 +4,9 @@ module;
 module spreadsheet;
 import <format>;
 import <utility>;
+import <algorithm>;
 
 using namespace std;
-
-// 이동 생성자
-Spreadsheet::Spreadsheet(Spreadsheet&& src) noexcept
-{
-	swap(*this, src);
-}
 
 // 이동 대입 연산자
 Spreadsheet& Spreadsheet::operator=(Spreadsheet&& rhs) noexcept
@@ -40,7 +35,7 @@ void Spreadsheet::swap(Spreadsheet& first, Spreadsheet& second) noexcept
 }
 
 Spreadsheet::Spreadsheet(const Spreadsheet& src)
-	: Spreadsheet{ src.m_width, src.m_height }
+	: Spreadsheet{ src.m_width, src.m_height, src.m_theApp }
 {
 	for (size_t i{ 0 }; i < m_width; i++)	{
 		for (size_t j{ 0 }; j < m_height; j++) {
@@ -49,8 +44,12 @@ Spreadsheet::Spreadsheet(const Spreadsheet& src)
 	}
 }
 
-Spreadsheet::Spreadsheet(size_t width, size_t height)
-	: m_width { width }, m_height {height}
+Spreadsheet::Spreadsheet(size_t width, size_t height,
+	const SpreadsheetApplication& theApp)
+	: m_id(ms_counter++)
+	, m_width{ min(width, MaxWidth) }
+	, m_height{ min(height, MaxHeight) }
+	, m_theApp {theApp}
 {
 	m_cells = new SpreadsheetCell * [m_width];
 	for (size_t i{ 0 }; i < m_width; i++) {
