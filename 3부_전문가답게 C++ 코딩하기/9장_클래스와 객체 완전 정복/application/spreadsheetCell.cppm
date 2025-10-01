@@ -18,6 +18,8 @@ export class SpreadsheetCell
 
 		void set(std::string_view inString);
 		std::string getString() const;
+
+		[[nodiscard]] auto operator<=>(const SpreadsheetCell&) const = default;
 	private:
 		static std::string doubleToString(double value);
 		static double stringToDouble(std::string_view inString);
