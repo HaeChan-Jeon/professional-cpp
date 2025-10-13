@@ -2,35 +2,45 @@
 
 using namespace std;
 
-class Something
+class Book
 {
-    public:
-        Something() { cout << "2"; }
-        //virtual ~Something() { cout << "2"; }
-        ~Something() { cout << "2"; }
+public:
+	virtual ~Book() = default;
+	virtual string getDescription() const { return "Book"; }
+	virtual int getHeight() const { return 120; }
 };
 
-class Base
+class Paperback : public Book
 {
-    public:
-        Base() { cout << "1"; }
-        //virtual ~Base() { cout << "1"; }
-        ~Base() { cout << "1"; }
+public:
+	string getDescription() const override {
+		return "Paperback " + Book::getDescription();
+	}
 };
 
-class Derived : public Base
+class Romance : public Paperback
 {
-    public:
-        Derived() { cout << "3"; }
-        //virtual ~Derived() { cout << "3"; }
-        ~Derived() { cout << "3"; }
-    private:
-        Something m_dataMember;
+public:
+	string getDescription() const override {
+		return "Romance " + Paperback::getDescription();
+	}
+	int getHeight() const override { return Paperback::getHeight() / 2; }
+};
+
+class Technical : public Book
+{
+public:
+	string getDescription() const override {
+		return "Technical " + Book::getDescription();
+	}
 };
 
 int main()
 {
-    //Derived myDerived;
-    Base* ptr{ new Derived{} };
-    delete ptr;
+	Romance novel;
+	Book book;
+	cout << novel.getDescription() << endl;
+	cout << book.getDescription() << endl;
+	cout << novel.getHeight() << endl;
+	cout << book.getHeight() << endl;
 }
