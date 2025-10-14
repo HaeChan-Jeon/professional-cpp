@@ -1,4 +1,8 @@
-﻿class Base
+﻿#include <iostream>
+
+using namespace std;
+
+class Base
 {
 	public:
 		virtual ~Base() = default;
@@ -12,8 +16,13 @@ class Derived : public  Base
 
 int main()
 {
-	Base* b;
-	Derived* d = { new Derived{} };
-	b = d;
-	d = dynamic_cast<Derived*>(b);
+	Base base;
+	Derived derived;
+	Base& br{ base };
+	try {
+		Derived& dr{ dynamic_cast<Derived&>(br) };
+	}
+	catch (const bad_cast&)	{
+		cout << "Bad cast!" << endl;
+	}
 }
