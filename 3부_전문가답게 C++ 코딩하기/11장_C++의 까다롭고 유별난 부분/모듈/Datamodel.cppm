@@ -2,9 +2,12 @@ export module datamodel;
 
 import <vector>;
 
-export namespace DataModel
+export
 {
-	class Person { /*...*/ };
-	class Address { /*...*/ };
-	using Persons = std::vector<Person>;
+	namespace DataModel
+	{
+		class Person { /*...*/ };
+		class Address { /*...*/ };
+		using Persons = std::vector<Person>;
+	}
 }
