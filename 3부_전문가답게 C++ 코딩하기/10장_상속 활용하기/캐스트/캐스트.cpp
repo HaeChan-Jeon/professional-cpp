@@ -1,14 +1,19 @@
-﻿#include <iostream>
-#include <bit>
+﻿class Base
+{
+	public:
+		virtual ~Base() = default;
+};
 
-using namespace std;
+class Derived : public  Base
+{
+	public:
+		virtual ~Derived() = default;
+};
 
 int main()
 {
-	float asFloat{ 1.23f };
-	auto asUnit{ bit_cast<unsigned int>(asFloat) };
-	if (bit_cast<float>(asUnit) == asFloat)
-	{
-		cout << "Roundtrip success." << endl;
-	}
+	Base* b;
+	Derived* d = { new Derived{} };
+	b = d;
+	d = dynamic_cast<Derived*>(b);
 }
