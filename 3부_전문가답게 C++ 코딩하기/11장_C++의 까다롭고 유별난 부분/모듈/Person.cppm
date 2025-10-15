@@ -1,7 +1,6 @@
-export module person;	// 모듈 선언문
-
+export module person;
 import <string>;
-
+// 구현 코드
 export class Person
 {
 public:
@@ -12,3 +11,8 @@ private:
 	std::string m_firstName;
 	std::string m_lastName;
 };
+// 구현 코드
+Person::Person(std::string firstName, std::string lastName)
+	: m_firstName{ move(firstName) }, m_lastName{ move(lastName) } { }
+const std::string& Person::getFirstName() const { return m_firstName; }
+const std::string& Person::getLastName() const { return m_lastName; }
