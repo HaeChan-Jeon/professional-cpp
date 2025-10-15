@@ -1,4 +1,5 @@
 ﻿import person;
+import datamodel.address;
 import <iostream>;
 import <string>;
 
@@ -8,4 +9,5 @@ int main()
 {
 	Person person{ "Haechan", "Jeon" };
 	cout << person.getLastName() << ", " << person.getFirstName() << endl;
+	DataModel::Address address{};
 }
