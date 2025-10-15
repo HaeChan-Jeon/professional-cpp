@@ -1,5 +1,5 @@
 ﻿import person;
-import datamodel.address;
+import datamodel;
 import <iostream>;
 import <string>;
 
