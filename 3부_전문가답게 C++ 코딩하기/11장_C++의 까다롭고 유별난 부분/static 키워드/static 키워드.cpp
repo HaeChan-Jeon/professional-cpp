@@ -1,6 +1,8 @@
-﻿void f();
+﻿#include <iostream>;
+
+extern int x;
 
 int main()
 {
-	f();
+	std::cout << x << std::endl;
 }
