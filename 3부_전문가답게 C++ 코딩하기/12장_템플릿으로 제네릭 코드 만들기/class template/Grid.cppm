@@ -21,7 +21,16 @@ public:
 	Grid& operator=(const Grid& rhs) = default;
 
 	Grid(Grid&& src) = default;
-	Grid& operator=(Grid&& rhs) = default;
+	Grid<T, WIDTH, HEIGHT>& operator=(Grid&& rhs) = default;
+
+	template <typename E, size_t WIDTH2, size_t HEIGHT2>
+	Grid(const Grid<E, WIDTH2, HEIGHT2>& src);
+
+
+	template <typename E, size_t WIDTH2, size_t HEIGHT2>
+	Grid& operator=(const Grid<E, WIDTH2, HEIGHT2>& rhs);
+
+	void swap(Grid& other) noexcept;
 
 	std::optional<T>& at(size_t x, size_t y);
 	const std::optional<T>& at(size_t x, size_t y) const;
@@ -33,6 +42,37 @@ private:
 
 	std::optional<T> m_cells[WIDTH][HEIGHT];
 };
+
+template <typename T, size_t WIDTH, size_t HEIGHT>
+template <typename E, size_t WIDTH2, size_t HEIGHT2>
+Grid<T, WIDTH, HEIGHT>::Grid(const Grid <E, WIDTH2, HEIGHT2>& src)
+{
+	for (size_t i{ 0 }; i < WIDTH; i++)	{
+		for (size_t j{ 0 }; j < HEIGHT; j++) {
+			if (i < WIDTH2 && j < HEIGHT2) {
+				m_cells[i][j] = src.at(i, j);
+			} else {
+				m_cells[i][j].reset();
+			}
+		}
+	}
+}
+
+template <typename T, size_t WIDTH, size_t HEIGHT>
+void Grid<T, WIDTH, HEIGHT>::swap(Grid& other) noexcept
+{
+	std::swap(m_cells, other.m_cells);
+}
+
+template <typename T, size_t WIDTH, size_t HEIGHT>
+template <typename E, size_t WIDTH2, size_t HEIGHT2>
+Grid<T, WIDTH, HEIGHT>& Grid<T, WIDTH, HEIGHT>::operator=(
+	const Grid<E, WIDTH2, HEIGHT2>& rhs)
+{
+	Grid<T, WIDTH, HEIGHT> temp{ rhs };
+	swap(temp);
+	return *this;
+}
 
 export template <typename T, size_t WIDTH, size_t HEIGHT>
 void Grid<T, WIDTH, HEIGHT>::verifyCoordinate(size_t x, size_t y) const
