@@ -1,23 +1,20 @@
-﻿import gird;
+﻿import grid;
+
+import <iostream>;
 
 using namespace std;
 
-using IntGrid = Grid<int>;
-using DoubleGrid = Grid<double>;
-
 int main()
 {
-	IntGrid myIntGrid;
-	DoubleGrid myDoubleGrid{ 11, 11 };
+	//size_t height{ 10 };
+	//Grid<int, 10, height> testGrid; // 컴파일 에러 발생
 
-	myIntGrid.at(0, 0) = 10;
-	int x{ myIntGrid.at(0,1).value_or(0) };
+	const size_t height{ 10 };
+	Grid<int, 10, height> testGrid; // 컴파일 성공
 
-	IntGrid grid2{ myIntGrid };
-	IntGrid anotherIntGrid;
-	anotherIntGrid = grid2;
-
-	Grid<vector<int>> girdOfVectors;
-	vector<int> myVector{ 1, 2, 3, 4 };
-	girdOfVectors.at(5, 6) = myVector;
+	Grid<int, 10, 10> myGrid;
+	Grid<int, 10, 10> anotherGrid;
+	myGrid.at(2, 3) = 42;
+	anotherGrid = myGrid;
+	cout << anotherGrid.at(2, 3).value_or(0);
 }

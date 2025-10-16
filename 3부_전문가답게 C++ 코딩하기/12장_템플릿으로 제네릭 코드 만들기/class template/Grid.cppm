@@ -2,7 +2,7 @@ module;
 
 #include <stdexcept>
 
-export module gird;
+export module grid;
 
 import gamePiece;
 
@@ -10,13 +10,13 @@ import <vector>;
 import <optional>;
 import <format>;
 
-export template <typename T>
+export template <typename T, size_t WIDTH, size_t HEIGHT>
 class Grid
 {
 public:
-	explicit Grid(size_t width = DefaultWidth,
-		size_t height = DefaultHeight);
+	Grid() = default;
 	virtual ~Grid() = default;
+
 	Grid(const Grid& src) = default;
 	Grid& operator=(const Grid& rhs) = default;
 
@@ -26,50 +26,36 @@ public:
 	std::optional<T>& at(size_t x, size_t y);
 	const std::optional<T>& at(size_t x, size_t y) const;
 
-	size_t getHeight() const { return m_height; }
-	size_t getWidth() const { return m_width; }
-
-	static const size_t DefaultWidth{ 10 };
-	static const size_t DefaultHeight{ 10 };
+	size_t getHeight() const { return HEIGHT; }
+	size_t getWidth() const { return WIDTH; }
 private:
 	void verifyCoordinate(size_t x, size_t y) const;
 
-	std::vector<std::vector<std::optional<T>>> m_cells;
-	size_t m_width{ 0 }, m_height{ 0 };
+	std::optional<T> m_cells[WIDTH][HEIGHT];
 };
 
-template <typename T>
-Grid<T>::Grid(size_t width, size_t height)
-	: m_width{ width }, m_height{ height }
+export template <typename T, size_t WIDTH, size_t HEIGHT>
+void Grid<T, WIDTH, HEIGHT>::verifyCoordinate(size_t x, size_t y) const
 {
-	m_cells.resize(m_width);
-	for (auto& column : m_cells) {
-		column.resize(m_height);
+	if (x >= WIDTH) {
+		throw std::out_of_range{
+			std::format("{} must be less than {}.", x, WIDTH) };
+	}
+	if (y >= HEIGHT) {
+		throw std::out_of_range{
+			std::format("{} must be less than {}.", y, HEIGHT) };
 	}
 }
 
-template <typename T>
-void Grid<T>::verifyCoordinate(size_t x, size_t y) const
-{
-	if (x >= m_width) {
-		throw std::out_of_range{
-			std::format("{} must be less than {}.", x, m_width) };
-	}
-	if (y >= m_height) {
-		throw std::out_of_range{
-			std::format("{} must be less than {}.", y, m_height) };
-	}
-}
-
-template <typename T>
-const std::optional<T>& Grid<T>::at(size_t x, size_t y) const
+export template <typename T, size_t WIDTH, size_t HEIGHT>
+const std::optional<T>& Grid<T, WIDTH, HEIGHT>::at(size_t x, size_t y) const
 {
 	verifyCoordinate(x, y);
 	return m_cells[x][y];
 }
 
-template <typename T>
-std::optional<T>& Grid<T>::at(size_t x, size_t y)
+export template <typename T, size_t WIDTH, size_t HEIGHT>
+std::optional<T>& Grid<T, WIDTH, HEIGHT>::at(size_t x, size_t y)
 {
 	return const_cast<std::optional<T>&>(std::as_const(*this).at(x, y));
 }
