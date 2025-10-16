@@ -10,7 +10,7 @@ import <vector>;
 import <optional>;
 import <format>;
 
-export template <typename T, size_t WIDTH, size_t HEIGHT>
+export template <typename T = int, size_t WIDTH = 10, size_t HEIGHT = 10>
 class Grid
 {
 public:

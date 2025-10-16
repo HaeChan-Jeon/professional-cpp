@@ -17,4 +17,11 @@ int main()
 	myGrid.at(2, 3) = 42;
 	anotherGrid = myGrid;
 	cout << anotherGrid.at(2, 3).value_or(0);
+
+	Grid<> myIntGrid;
+	Grid<int> myGrid2;
+	Grid<int, 5> anotherGrid2;
+	Grid <int, 5, 5> aFourthGrid;
+
+	//Grid myIntGrid; // 에러발생
 }
