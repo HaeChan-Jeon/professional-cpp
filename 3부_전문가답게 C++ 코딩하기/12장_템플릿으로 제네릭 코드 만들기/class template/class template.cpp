@@ -1,4 +1,4 @@
-﻿import GameBoard;
+﻿import gameBoard;
 
 using namespace std;
 

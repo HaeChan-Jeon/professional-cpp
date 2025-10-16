@@ -1,4 +1,4 @@
-export module GamePiece;
+export module gamePiece;
 
 import <memory>;
 
