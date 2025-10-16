@@ -1,4 +1,4 @@
-﻿import gameBoard;
+﻿import gird;
 
 using namespace std;
 
