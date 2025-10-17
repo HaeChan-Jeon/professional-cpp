@@ -1,9 +1,22 @@
 ﻿#include <iostream>
+#include <format>
+#include <string>
 
 using namespace std;
 
 int main()
 {
+	string myString;
+	getline(cin, myString, '@');
+	cout << myString;
+
+	char c;
+	cin >> c;
+	cout << format("Retrieved {} before putback('e').", c) << endl;
+	cin.putback('e');
+	cin >> c;
+	cout << format("Retrieved {} after putback('e').", c) << endl;
+
 	const char* test{ "hello, there\n" };
 	cout.write(test, strlen(test));
 
