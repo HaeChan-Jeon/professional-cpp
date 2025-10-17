@@ -38,4 +38,53 @@ int main()
 	}
 
 	cout.clear();
+
+	int sum{ 0 };
+
+	while (!cin.bad()) {
+		int number;
+		cin >> number;
+		if (cin.good()) {
+			sum += number;
+		} else if (cin.eof()) {
+			break;
+		} else if (cin.fail()) {
+			cin.clear();
+			string badToken;
+			cin >> badToken;
+			cerr << "WARNING: Bad input encountered: " << badToken << endl;
+		}
+	}
+	cout << "The sum is " << sum << endl;
+}
+
+string readName(istream& stream)
+{
+	string name;
+	char next;
+	while (stream.get(next)) {
+		name += next;
+	}return name;
+}
+
+void getReservationData()
+{
+	string guestName;
+	int partySize{ 0 };
+	// 숫자가 나올 때까지 문자를 읽는다.
+	char ch;
+	cin >> noskipws;
+	while (cin >> ch) {
+		if (isdigit(ch)) {
+			cin.unget();
+			if (cin.fail())
+				cout << "unget() failed" << endl;
+			break;
+		}
+		guestName += ch;
+	}
+	// 스트림이 에러 상태가 아니면 partSize 값을 읽는다.
+	if (cin)
+		cin >> partySize;
+
 }
