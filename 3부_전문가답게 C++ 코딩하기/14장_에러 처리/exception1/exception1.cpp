@@ -1,40 +1,22 @@
 ﻿#include <string>
 #include <iostream>
 #include <fstream>
+#include <format>
+#include <source_location>
 
 using namespace std;
 
-void funcOne();
-void funcTwo();
-
 int main()
 {
-	try	{
-		funcOne();
-	} catch (const exception& e) {
-		cerr << "Exception cought!" << endl;
-		return 1;
-	}
-}
-
-void funcOne()
-{
-	string str1;
-	string* str2{ new string {} };
-
+	int* ptr{ nullptr };
+	size_t integerCount{ numeric_limits<size_t>::max() };
+	cout << format("Trying to allocate memory for {} integers.", integerCount) << endl;
 	try {
-		funcTwo();
-	} catch (...) {
-		delete str2;
-		throw;
+		ptr = new int[integerCount];
+	} catch (const bad_alloc& e) {
+		auto location{ source_location::current() };
+		cerr << format("{}({}): Unable to allocate memory: {}",
+			location.file_name(), location.line(), e.what()) << endl;
+		return 0;
 	}
-	delete str2;
-}
-
-void funcTwo()
-{
-	ifstream fileStream;
-	fileStream.open("filename");
-	throw exception{};
-	fileStream.close();
 }
