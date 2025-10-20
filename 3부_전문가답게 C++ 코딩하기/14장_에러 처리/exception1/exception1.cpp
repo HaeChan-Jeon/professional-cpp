@@ -20,9 +20,8 @@ int main()
 void funcOne()
 {
 	string str1;
-	string* str2{ new string {} };
+	auto str2{ make_unique<string>("hello") };
 	funcTwo();
-	delete str2;
 }
 
 void funcTwo()
