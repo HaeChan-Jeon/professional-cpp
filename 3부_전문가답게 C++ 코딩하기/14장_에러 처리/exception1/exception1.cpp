@@ -20,8 +20,14 @@ int main()
 void funcOne()
 {
 	string str1;
-	auto str2{ make_unique<string>("hello") };
-	funcTwo();
+	string* str2{ new string {} };
+
+	try {
+		funcTwo();
+	} catch (...) {
+		delete str2;
+		throw;
+	}
 }
 
 void funcTwo()
