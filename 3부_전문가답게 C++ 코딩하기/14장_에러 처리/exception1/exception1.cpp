@@ -28,6 +28,7 @@ void funcOne()
 		delete str2;
 		throw;
 	}
+	delete str2;
 }
 
 void funcTwo()
