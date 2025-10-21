@@ -1,32 +1,14 @@
 ﻿#include <vector>
-#include <iostream>
-#include <format>
 
 using namespace std;
 
 int main()
 {
-	vector<double> doubleVector;
+	vector<int> intVector(10);
+	intVector.assign(5, 100);
+	intVector.assign({ 1, 2, 3, 4, 5 });
 
-	double max{ -numeric_limits<double>::infinity() };
-
-	double temp;
-
-	for (size_t i{ 1 }; true; i++) {
-		cout << format("Enter score {}: (-1 to stop): ", i);
-		cin >> temp;
-		if (temp == -1) {
-			break;
-		}
-		doubleVector.push_back(temp);
-		if (temp > max) {
-			max = temp;
-		}
-	}
-
-	max /= 100.0;
-	for (auto& element : doubleVector) {
-		element /= max;
-		cout << element << " ";
-	}
+	vector<int> vectorOne(10);
+	vector<int> vectorTwo(5, 100);
+	vectorOne.swap(vectorTwo);
 }
