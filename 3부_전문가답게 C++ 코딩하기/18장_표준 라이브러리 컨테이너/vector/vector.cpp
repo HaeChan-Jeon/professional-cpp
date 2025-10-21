@@ -6,15 +6,21 @@ using namespace std;
 
 int main()
 {
-	vector<double> doubleVector(10);
+	vector<double> doubleVector;
 
 	double max{ -numeric_limits<double>::infinity() };
 
-	for (size_t i{ 0 }; i < doubleVector.size(); i++) {
-		cout << format("Enter score {}: ", i + 1);
-		cin >> doubleVector[i];
-		if (doubleVector[i] > max) {
-			max = doubleVector[i];
+	double temp;
+
+	for (size_t i{ 1 }; true; i++) {
+		cout << format("Enter score {}: (-1 to stop): ", i);
+		cin >> temp;
+		if (temp == -1) {
+			break;
+		}
+		doubleVector.push_back(temp);
+		if (temp > max) {
+			max = temp;
 		}
 	}
 
