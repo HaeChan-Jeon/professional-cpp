@@ -1,27 +1,28 @@
 ﻿#include <iostream>
 #include <list>
+#include <vector>
 
 using namespace std;
 
+list<string> getTotalEnrollment(const vector<list<string>>& courseStudent,
+	const list<string>& droppedStudents)
+{
+	list<string> allStudents;
+		
+		for (auto& lst : courseStudent) {
+			allStudents.insert(cend(allStudents), cbegin(lst), cend(lst));
+		}
+
+		allStudents.sort();
+		allStudents.unique();
+
+		for (auto& str : droppedStudents) {
+			allStudents.remove(str);
+		}
+
+		return allStudents;
+}
+
 int main()
 {
-    list<string> dictionary{ "aardvark", "ambulance" };
-    list<string> bWords{ "bathos", "balderdash" };
-    dictionary.push_back("canticle");
-    dictionary.push_back("consumerism");
-
-    if (!bWords.empty()) {
-        auto iterLastB{ --(cend(bWords)) };
-        auto it{ cbegin(dictionary) };
-        for (; it != cend(dictionary); ++it) {
-            if (*it > *iterLastB) {
-                break;
-            }
-        }
-        dictionary.splice(it, bWords);
-    }
-
-    for (const auto& word : dictionary) {
-        cout << word << endl;
-    }
 }
