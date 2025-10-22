@@ -5,36 +5,16 @@ using namespace std;
 
 int main()
 {
-	vector<double> doubleVector(10);
-	double max = 0;
+	string str1{ "Hello" };
+	string str2{ "World" };
 
-	//for (vector<double>::iterator iter{ begin(doubleVector) };
-	//	iter != end(doubleVector); ++iter) {
-	//		*iter /= max;
-	//		cout << *iter << "";
-	//	}
+	// 스트링에 대한 레퍼런스를 담는 vector를 생성한다.
+	vector<reference_wrapper<string>> vec{ ref(str1) };
+	vec.push_back(ref(str2)); // pust_back()을 호출할 때도 ref()를 사용할 수 있다.
 
-	for (auto iter{ begin(doubleVector) };
-		iter != end(doubleVector); ++iter) {
-		*iter /= max;
-		cout << *iter << "";
-	}
+	// 앞에서 만든 vector의 두 번째 원소(레퍼런스)가 참조하는 스트링값을 변경한다.
+	vec[1].get() += "!";
 
-	//vector<string> stringVector(10, "hello");
-	//for (auto it{ begin(stringVector) }; it != end(stringVector); ++it) {
-	//	it->append(" there");
-	//}
-
-	vector<string> stringVector(10, "hello");
-	for (auto& str : stringVector) {
-		str.append(" there");
-	}
-
-	for (auto iter{ cbegin(stringVector)}; iter != cend(stringVector); ++iter) {
-		cout << *iter << endl;
-	}
-
-	for (const auto& element : stringVector) {
-		cout << element << endl;
-	}
+	// 최종 결과(변경된 str2 값)을 출력한다.
+	cout << str1 << " " << str2 << endl;
 }
