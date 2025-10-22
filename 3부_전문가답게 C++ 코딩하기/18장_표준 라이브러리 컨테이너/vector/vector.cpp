@@ -1,14 +1,40 @@
 ﻿#include <vector>
+#include <iostream>
 
 using namespace std;
 
 int main()
 {
-	vector<int> intVector(10);
-	intVector.assign(5, 100);
-	intVector.assign({ 1, 2, 3, 4, 5 });
+	vector<double> doubleVector(10);
+	double max = 0;
 
-	vector<int> vectorOne(10);
-	vector<int> vectorTwo(5, 100);
-	vectorOne.swap(vectorTwo);
+	//for (vector<double>::iterator iter{ begin(doubleVector) };
+	//	iter != end(doubleVector); ++iter) {
+	//		*iter /= max;
+	//		cout << *iter << "";
+	//	}
+
+	for (auto iter{ begin(doubleVector) };
+		iter != end(doubleVector); ++iter) {
+		*iter /= max;
+		cout << *iter << "";
+	}
+
+	//vector<string> stringVector(10, "hello");
+	//for (auto it{ begin(stringVector) }; it != end(stringVector); ++it) {
+	//	it->append(" there");
+	//}
+
+	vector<string> stringVector(10, "hello");
+	for (auto& str : stringVector) {
+		str.append(" there");
+	}
+
+	for (auto iter{ cbegin(stringVector)}; iter != cend(stringVector); ++iter) {
+		cout << *iter << endl;
+	}
+
+	for (const auto& element : stringVector) {
+		cout << element << endl;
+	}
 }
