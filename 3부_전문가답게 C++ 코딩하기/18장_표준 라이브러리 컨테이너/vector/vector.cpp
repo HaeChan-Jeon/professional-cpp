@@ -29,3 +29,10 @@ int main()
 	int* data1{ vec3.data() };
 	int* data2{ data(vec3) };
 }
+
+vector<int> createVectorOfSize(size_t size)
+{
+	vector<int> vec5(size);
+	for (int contents{ 0 }; auto & i : vec5) { i = contents++; }
+	return vec5;
+}
