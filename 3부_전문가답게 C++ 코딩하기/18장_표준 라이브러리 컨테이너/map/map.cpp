@@ -3,49 +3,91 @@
 
 using namespace std;
 
-int main()
+class BankAccount final
 {
-	map<int, int> intMap;
+public:
+	BankAccount(int accountNumber, std::string name)
+		: m_accountNumber { accountNumber }, m_clientName { std::move(name)} { }
+	void setaccountNumber(int accountNumber) {
+		m_accountNumber = accountNumber; }
+	int getaccountNumber() const { return m_accountNumber; }
 
-	if (auto result {intMap.insert({1, 4})}; result.second) {
-		cout << "Insert succeeded!" << endl;
-	}
+	void setClientName(std::string name) { m_clientName = std::move(name); }
+	const std::string& getClientName() const { return m_clientName; }
+private:
+	int m_accountNumber;
+	std::string m_clientName;
+};
 
-	if (auto [iter, success] { intMap.insert({2, 5}) }; success) {
-		cout << "Insert succeeded!" << endl;
-	}
+class BankDB final
+{
+public:
+	bool addAccount(const BankAccount& account);
 
-	auto ret = intMap.insert_or_assign(1, 5);
-	if (ret.second) {
-		cout << "Inserted." << endl;
-	} else {
-		cout << "Overwritten." << endl;
-	}
+	void deleteAccount(int accountNumber);
 
-	for (const auto& p : intMap ) {
-		cout << p.second << endl;
+	BankAccount& findAccount(int accountNumber);
+	BankAccount& findAccount(std::string_view name);
+
+	void mergeDatabase(BankDB& db);
+private:
+	std::map<int, BankAccount> m_accounts;
+};
+
+bool BankDB::addAccount(const BankAccount& account)
+{
+	auto res{ m_accounts.emplace(account.getaccountNumber(), account) };
+
+	return res.second;
+}
+
+void BankDB::deleteAccount(int accountNumber)
+{
+	m_accounts.erase(accountNumber);
+}
+
+BankAccount& BankDB::findAccount(int accountNumber)
+{
+	auto it{ m_accounts.find(accountNumber) };
+	if (it == end(m_accounts)){
+		throw std::out_of_range{ "No account with that number." };
 	}
 	
-	auto it{ intMap.find(1) };
-	if (it != end(intMap)) {
-		it -> second = 100;
+	return it->second;
+}
+
+BankAccount& BankDB::findAccount(string_view name)
+{
+	for (auto& [accountNumber, account] : m_accounts) {
+		if (account.getClientName() == name) {
+			return account;
+		}
 	}
+	throw std::out_of_range{ "No account with that name." };
+}
 
-	auto isKeyInMap{ intMap.contains(1) };
+void BankDB::mergeDatabase(BankDB& db)
+{
+	m_accounts.merge(db.m_accounts);
+	db.m_accounts.clear();
+}
 
-	map<int, int> intMap2;
-	auto extractedNode{ intMap.extract(1) };
-	intMap2.insert(move(extractedNode));
+int main()
+{
+	BankDB db;
+	db.addAccount(BankAccount{ 100, "Nicholas Solter" });
+	db.addAccount(BankAccount{ 200, "Scott Kleper" });
 
-	intMap2.insert(intMap.extract(2));
+	try {
+		auto& account{ db.findAccount(100) };
+		cout << "Found account 100" << endl;
+		account.setClientName("Nicholas A Solter");
 
-	for (const auto& p : intMap) {
-		cout << p.second << endl;
-	}
+		auto& account2{ db.findAccount("Scott Kleper")};
+		cout << "Found account Scott Kleper" << endl;
 
-	intMap.merge(intMap2);
-
-	for (const auto& p : intMap) {
-		cout << p.second << endl;
+		auto& account3{ db.findAccount(1000) };
+	} catch (const std::out_of_range& caughtException) {
+		cout << "Unable to find account: " << caughtException.what() << endl;
 	}
 }
