@@ -4,7 +4,12 @@
 #include <format>
 #include <vector>
 #include <cmath>
+#include <queue>
+#include <set>
+#include <string_view>
+#include <unordered_set>
 
+using namespace std::string_view_literals;
 using namespace std;
 
 //using Matcher = function<bool(int, int)>;
@@ -42,22 +47,29 @@ using namespace std;
 //private:
 //    int m_value;
 //};
+//
+//template <typename Iter, typename StartValue, typename Operation>
+//auto accumulateData(Iter begin, Iter end, StartValue startValue, Operation op)
+//{
+//	auto accumulated{ startValue };
+//	for (Iter iter{ begin }; iter != end; ++iter) {
+//		accumulated = op(accumulated, *iter);
+//	}
+//	return accumulated;
+//}
+//
+//double geometricMeanTransparent(span<const int> values)
+//{
+//	auto mult{ accumulateData(cbegin(values), cend(values), 1.1, multiplies<>{}) };
+//	return pow(mult, 1.0 / values.size());
+//}
 
-template <typename Iter, typename StartValue, typename Operation>
-auto accumulateData(Iter begin, Iter end, StartValue startValue, Operation op)
+class Hasher
 {
-	auto accumulated{ startValue };
-	for (Iter iter{ begin }; iter != end; ++iter) {
-		accumulated = op(accumulated, *iter);
-	}
-	return accumulated;
-}
-
-double geometricMeanTransparent(span<const int> values)
-{
-	auto mult{ accumulateData(cbegin(values), cend(values), 1.1, multiplies<>{}) };
-	return pow(mult, 1.0 / values.size());
-}
+public:
+	using is_transparent = void;
+	size_t operator()(string_view sv) const { return hash<string_view>{}(sv); }
+};
 
 int main()
 {
@@ -65,7 +77,23 @@ int main()
 	//vector values2{ 4, 4, 2, 9, 0, 300, 1 };
 	//findMatches(values1, values2, IsLargerThan { 100 }, &printMatch);
 
-	plus<int> myPlus;
-	int res{ myPlus(4, 5) };
-	cout << res << endl;
+	//plus<int> myPlus;
+	//int res{ myPlus(4, 5) };
+	//cout << res << endl;
+
+	priority_queue<int, vector<int>, greater<>> myQueue;
+
+	set<string> mySet;
+	auto i1{ mySet.find("Key") };
+	// auto i2 { mySet.find("Key"sv) }; // 이렇게 하면 컴파일 에러가 발생함
+
+	// 이종 룩업
+	set<string, less<>> mySet2;
+	auto i2{ mySet2.find("Key") };
+	auto i3{ mySet2.find("Key"sv) };
+
+	unordered_set<string, Hasher, equal_to<>> mySet3;
+	auto i4{ mySet3.find("Key") };
+	auto i5{ mySet3.find("Key"sv) };
+
 }
