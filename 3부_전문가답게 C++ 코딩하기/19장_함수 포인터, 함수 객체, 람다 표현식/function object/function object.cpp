@@ -53,9 +53,9 @@ auto accumulateData(Iter begin, Iter end, StartValue startValue, Operation op)
 	return accumulated;
 }
 
-double geometricMean(span<const int> values)
+double geometricMeanTransparent(span<const int> values)
 {
-	auto mult{ accumulateData(cbegin(values), cend(values), 1, multiplies<int>{}) };
+	auto mult{ accumulateData(cbegin(values), cend(values), 1.1, multiplies<>{}) };
 	return pow(mult, 1.0 / values.size());
 }
 
