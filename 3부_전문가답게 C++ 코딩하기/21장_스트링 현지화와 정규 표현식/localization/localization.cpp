@@ -5,13 +5,10 @@ using namespace std;
 
 int main()
 {
-	// 확장 문자
-	wchar_t myWideCharacter{ L'm' };
-	wcout << L"I am a wide-character string Literal." << endl;
+	const char8_t* s1{ u8R"(Raw UTF-8 encoded string literal)" };
+	const wchar_t* s2{ LR"(Raw wide string literal)" };
+	const char16_t* s3{ uR"(Raw char16_t encoded string literal)" };
+	const char32_t* s4{ UR"(Raw char32_t encoded string literal)" };
 
-	// 스트링 리터널 현지화하기
-	size_t n{ 5 };
-	wstring filename{ L"file1.txt" };
-	wcout << L"Read " << n << L" bytes from " << filename << endl;
-	cout << format(loadResource(IDS_TRANSFERRED), n, filename) << endl;
+	const char8_t* formula{ u8"\u03c0 r\u00B2" };
 }
