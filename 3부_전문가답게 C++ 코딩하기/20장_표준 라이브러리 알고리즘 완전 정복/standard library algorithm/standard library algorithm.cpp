@@ -21,13 +21,37 @@ int main()
 {
 	vector<int> values;
 	polulateContainter(values);
-	sort(begin(values), end(values), greater<>{});
 
-	// 선택 알고리즘
-	nth_element(begin(values), begin(values) + 2, end(values), greater<>{});
-	cout << "3rd largest valud: " << values[2] << endl;
-	
-	nth_element(begin(values), begin(values) + 4, end(values), greater<>{});
-	sort(begin(values), begin(values) + 5);
-	for_each_n(begin(values), 5, [](const auto& element) {cout << element << " "; });
+	sort(begin(values), end(values));
+
+	//cout << "Sorted vector: ";
+	//for (const auto& i : values) { cout << i << " "; }
+	//cout << endl;
+
+	//while (true) {
+	//	int number;
+	//	cout << "Enter a number to insert (0 th quit): ";
+	//	cin >> number;
+	//	if (number == 0) { break; }
+
+	//	auto iter{ lower_bound(begin(values), end(values), number) };
+	//	values.insert(iter, number);
+
+	//	cout << "New vector: ";
+	//	for (const auto& i : values) { cout << i << " "; }
+	//	cout << endl;
+	//}
+
+	while (true) {
+		int number;
+		cout << "Enter a number to insert (0 th quit): ";
+		cin >> number;
+		if (number == 0) { break; }
+
+		if (binary_search(cbegin(values), cend(values), number)) {
+			cout << "That number is in the vector." << endl;
+		} else {
+			cout << "That number is not in the vector." << endl;
+		}
+	}
 }
