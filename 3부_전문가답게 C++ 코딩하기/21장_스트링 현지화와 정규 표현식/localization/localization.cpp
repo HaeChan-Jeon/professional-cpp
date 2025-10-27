@@ -1,25 +1,20 @@
 ﻿#include <iostream>
 #include <format>
 #include <locale>
+#include <sstream>
 
 using namespace std;
 
+void print()
+{
+	stringstream stream;
+	stream << 32767;
+	cout << stream.str() << endl;
+}
+
 int main()
 {
-	wcout.imbue(locale{ "" });
-	wcout << 32767 << endl;
-
-	wcout.imbue(locale{ "C" });
-	wcout << 32767 << endl;
-
-	wcout.imbue(locale{ "en-US" });
-	wcout << 32767 << endl;
-
-	locale loc{ "" };
-	if (loc.name().find("en_US") == string::npos &&
-		loc.name().find("en-US") == string::npos) {
-		wcout << L"Welcome non-US English speaker!" << endl;
-	} else {
-		wcout << L"Welcome US English speaker!" << endl;
-	}
+	print();
+	locale::global(locale{ "en-US" });
+	print();
 }
