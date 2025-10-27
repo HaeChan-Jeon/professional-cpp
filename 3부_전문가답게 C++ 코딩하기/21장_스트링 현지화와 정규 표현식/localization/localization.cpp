@@ -1,14 +1,25 @@
 ﻿#include <iostream>
 #include <format>
+#include <locale>
 
 using namespace std;
 
 int main()
 {
-	const char8_t* s1{ u8R"(Raw UTF-8 encoded string literal)" };
-	const wchar_t* s2{ LR"(Raw wide string literal)" };
-	const char16_t* s3{ uR"(Raw char16_t encoded string literal)" };
-	const char32_t* s4{ UR"(Raw char32_t encoded string literal)" };
+	wcout.imbue(locale{ "" });
+	wcout << 32767 << endl;
 
-	const char8_t* formula{ u8"\u03c0 r\u00B2" };
+	wcout.imbue(locale{ "C" });
+	wcout << 32767 << endl;
+
+	wcout.imbue(locale{ "en-US" });
+	wcout << 32767 << endl;
+
+	locale loc{ "" };
+	if (loc.name().find("en_US") == string::npos &&
+		loc.name().find("en-US") == string::npos) {
+		wcout << L"Welcome non-US English speaker!" << endl;
+	} else {
+		wcout << L"Welcome US English speaker!" << endl;
+	}
 }
