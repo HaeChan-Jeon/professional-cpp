@@ -29,6 +29,8 @@ void DumpRange(string_view message, Iterator begin, Iterator end)
 
 int main()
 {
-	vector<int> myVector;
-	sort(execution::par, begin(myVector), end(myVector));
+	vector values{ 1, 2, 3 };
+	//auto result{ ranges::find(cbegin(values), end(values), 2) };
+	auto result{ ranges::find(values, 2) };
+	if (result != cend(values)) { cout << *result << endl; }
 }
