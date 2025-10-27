@@ -29,8 +29,7 @@ void DumpRange(string_view message, Iterator begin, Iterator end)
 
 int main()
 {
-	vector values{ 1, 2, 3 };
-	//auto result{ ranges::find(cbegin(values), end(values), 2) };
-	auto result{ ranges::find(values, 2) };
-	if (result != cend(values)) { cout << *result << endl; }
+	vector<int> values(10);
+	iota(begin(values), end(values), 5);
+	for (auto& i : values) { cout << i << " "; }
 }
