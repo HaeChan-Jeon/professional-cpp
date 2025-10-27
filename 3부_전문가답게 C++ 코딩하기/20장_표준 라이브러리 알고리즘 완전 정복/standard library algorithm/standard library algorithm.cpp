@@ -27,40 +27,21 @@ void DumpRange(string_view message, Iterator begin, Iterator end)
 
 int main()
 {
-	vector<int> vec1, vec2, result;
-	cout << "Enter elements for set 1:" << endl;
-	polulateContainter(vec1);
-	cout << "Enter elements for set 2:" << endl;
-	polulateContainter(vec2);
+	vector<int> vectorOne, vectorTwo, vectorMerged;
+	cout << "Enter values for first vector:" << endl;
+	polulateContainter(vectorOne);
+	cout << "Enter values for second vector:" << endl;
+	polulateContainter(vectorTwo);
 
-	// 정렬된 범위에 집합 알고리즘 적용하기
-	sort(begin(vec1), end(vec1));
-	sort(begin(vec2), end(vec2));
+	// 두 컨테이너를 정렬한다.
+	sort(begin(vectorOne), end(vectorOne));
+	sort(begin(vectorTwo), end(vectorTwo));
 
-	DumpRange("Set 1: ", cbegin(vec1), cend(vec1));
-	DumpRange("Set 2: ", cbegin(vec2), cend(vec2));
+	// 두 원본 vector 합친 값을 모두 담을 정도로 대상 vector의 크기를 넉넉히 확보한다.
+	vectorMerged.resize(size(vectorOne) + size(vectorTwo));
 
-	if (includes(cbegin(vec1), cend(vec1), cbegin(vec2), cend(vec2))) {
-		cout << "The second set is a subset of the first." << endl;
-	}
-	if (includes(cbegin(vec2), cend(vec2), cbegin(vec1), cend(vec1))) {
-		cout << "The first set is a subset of the second." << endl;
-	}
+	merge(cbegin(vectorOne), cend(vectorOne),
+		cbegin(vectorTwo), cend(vectorTwo), begin(vectorMerged));
 
-	result.resize(size(vec1) + size(vec2));
-	auto newEnd{ set_union(cbegin(vec1), cend(vec1), cbegin(vec2),
-		cend(vec2), begin(result)) };
-	DumpRange("The union is: ", begin(result), newEnd);
-
-	newEnd = set_intersection(cbegin(vec1), cend(vec1), cbegin(vec2),
-		cend(vec2), begin(result));
-	DumpRange("The intersection is: ", begin(result), newEnd);
-
-	newEnd = set_difference(cbegin(vec1), cend(vec1), cbegin(vec2),
-		cend(vec2), begin(result));
-	DumpRange("The difference is: ", begin(result), newEnd);
-
-	newEnd = set_symmetric_difference(cbegin(vec1), cend(vec1), cbegin(vec2),
-		cend(vec2), begin(result));
-	DumpRange("The symmetric difference is: ", begin(result), newEnd);
+	DumpRange("Merged vector: ", cbegin(vectorMerged), cend(vectorMerged));
 }
