@@ -7,5 +7,5 @@ using namespace std;
 
 int main()
 {
-	bool result{ isupper('E', locale {"fr-FR"}) };
+	auto upper{ toupper('e', locale {"fr-FR"}) };
 }
