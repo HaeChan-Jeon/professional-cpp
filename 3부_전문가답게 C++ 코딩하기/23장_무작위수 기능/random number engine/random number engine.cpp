@@ -1,17 +1,30 @@
 ﻿#include <iostream>
 #include <random>
+#include <functional>
+#include <vector>
 
 using namespace std;
 
-using mt19937 = mersenne_twister_engine<uint_fast32_t, 32, 624, 397, 31,
-	0x9908b0df, 11, 0xffffffff, 7, 0x9d2c5680, 15, 0xefc60000, 18,
-	1812433252>;
+void fillVector(vector<int>& values, const auto& generator)
+{
+	generate(begin(values), end(values), generator);
+}
 
 int main()
 {
-	random_device rnd;
-	cout << "Entropy: " << rnd.entropy() << endl;
-	cout << "Min value: " << rnd.min()
-		<< ", Max value: " << rnd.max() << endl;
-	cout << "Random number: " << rnd() << endl;
+	random_device seeder;
+	const auto seed{ seeder.entropy() ? seeder() : time(nullptr) };
+	mt19937 engine{ static_cast<mt19937::result_type>(seed) };
+
+	uniform_int_distribution<int> distribution{ 1, 99 };
+
+	cout << distribution(engine) << endl;
+
+	auto generator{ bind(distribution, engine) };
+
+	vector<int> values(10);
+	//generate(begin(values), end(values), generator);
+	fillVector(values, generator);
+
+	for (auto i : values) { cout << i << " "; }
 }
