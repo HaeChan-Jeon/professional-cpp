@@ -7,20 +7,12 @@
 
 using namespace std;
 
-class Foo
+int add(int a, int b)
 {
-	public:
-		Foo(string s, int i) : m_str{ move(s) }, m_int{ 1 }
-		{
-		}
-
-	private:
-		int m_int;
-		string m_str;
-};
+	return a + b;
+}
 
 int main()
 {
-	tuple myTuple{ "Hello world", 42 };
-	auto foo{ make_from_tuple<Foo>(myTuple) };
+	cout << apply(add, tuple{ 39, 3 }) << endl;
 }
