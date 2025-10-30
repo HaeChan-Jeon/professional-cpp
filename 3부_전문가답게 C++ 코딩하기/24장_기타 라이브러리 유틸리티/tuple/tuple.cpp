@@ -2,6 +2,7 @@
 #include <utility>
 #include <tuple>
 #include <format>
+#include <functional>
 
 using namespace std;
 
@@ -23,4 +24,20 @@ int main()
 		<< typeid(tuple_element<2, MyTuple>::type).name() << endl;
 
 	cout << "String = " << get<string>(t1) << endl;
+
+	cout << "Tuple Size = " << tuple_size<MyTuple>::value << endl;
+	
+	cout << "Tuple Size = " << tuple_size<decltype(t1)>::value << endl;
+
+	//tuple t1{ 16, "Test"s, true };
+
+	double d{ 3.14 };
+	string str1{ "Test" };
+	tuple t2{ 16, ref(d), cref(d), ref(str1) };
+
+	cout << "d = " << d << endl;
+	get<1>(t2) *= 2;
+	cout << "d = " << d << endl;
+
+	auto t2{ make_tuple(16, ref(d), cref(d), ref(str1)) };
 }
