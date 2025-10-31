@@ -7,29 +7,25 @@
 
 using namespace std;
 
-atomic_flag spinlock = ATOMIC_FLAG_INIT;
-static const size_t NumberOfThreads{ 50 };
-static const size_t LoopsPerThread{ 100 };
-
-void dowork(size_t threadNumber, vector<size_t>& data)
+once_flag g_onceFlag;
+void initializeSharedResources()
 {
-	for (size_t i{ 0 }; i < LoopsPerThread; ++i) {
-		while (spinlock.test_and_set()) { }
-		data.push_back(threadNumber);
-		spinlock.clear();
-	}
+	cout << "Shared resources initialized." << endl;
+}
+
+void processingFunction()
+{
+	call_once(g_onceFlag, initializeSharedResources);
+	cout << "Processing" << endl;
 }
 
 int main()
 {
-	vector<size_t> data;
-	vector<thread> threads;
-	for (size_t i{ 0 }; i < NumberOfThreads; ++i) {
-		threads.push_back(thread{ dowork, i, ref(data) });
+	vector<thread> threads{ 3 };
+	for (auto& t : threads) {
+		t = thread{ processingFunction };
 	}
 	for (auto& t : threads) {
 		t.join();
 	}
-	cout << format("data contains {} element, excepted {}.\n", data.size(),
-		NumberOfThreads * LoopsPerThread);
 }
