@@ -4,28 +4,32 @@
 #include <thread>
 #include <vector>
 #include <format>
+#include <syncstream>
 
 using namespace std;
 
-once_flag g_onceFlag;
-void initializeSharedResources()
+class Counter
 {
-	cout << "Shared resources initialized." << endl;
-}
+public:
+	Counter(int id, int numIterations)
+		: m_id { id }, m_numIterations { numIterations } { }
+	
+	void operator()() const
+	{
+		for (int i { 0 }; i  < m_numIterations; ++i) {
+		/*	osyncstream { cout } << "Counter"
+				<< m_id << " has value " << i << endl;*/
+			
+			osyncstream syncedCout{ cout };
+			syncedCout << m_id << " has value " << i << endl;
+		}
+	}
 
-void processingFunction()
-{
-	call_once(g_onceFlag, initializeSharedResources);
-	cout << "Processing" << endl;
-}
+private:
+	int m_id;
+	int m_numIterations;
+};
 
 int main()
 {
-	vector<thread> threads{ 3 };
-	for (auto& t : threads) {
-		t = thread{ processingFunction };
-	}
-	for (auto& t : threads) {
-		t.join();
-	}
 }
