@@ -3,16 +3,11 @@
 
 using namespace std;
 
-class Foo { private: int m_array[123]; };
-class Bar { private: int m_int; };
-
 int main()
 {
-	atomic<Foo> f;
-	// 결과: 1 0
-	cout << is_trivially_copyable_v<Foo> << " " << f.is_lock_free() << endl;
-
-	atomic<Bar> b;
-	// 결과: 1 1
-	cout << is_trivially_copyable_v<Bar> << " " << b.is_lock_free() << endl;
+	atomic<int> value{ 10 };
+	cout << "Value = " << value << endl;
+	int fetched{ value.fetch_add(4) };
+	cout << "Fetched = " << fetched << endl;
+	cout << "Value = " << value << endl;
 }
