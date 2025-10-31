@@ -3,33 +3,37 @@
 #include <mutex>
 #include <thread>
 #include <vector>
-#include <format>
-#include <syncstream>
-#include <chrono>
 
 using namespace std;
-using namespace chrono;
 
-class Counter
+void initializeSharedResources()
 {
-public:
-	Counter(int id, int numIterations)
-		: m_id { id }, m_numIterations { numIterations } { }
-	
-	void operator()() const
-	{
-		for (int i { 0 }; i  < m_numIterations; ++i) {
-			unique_lock lokc{ ms_timedMutex, 200ms };
-			cout << "Counter" << m_id << " has value " << i << endl;
+	cout << "Shared resources initialized." << endl;
+}
+
+atomic<bool> g_initialized{ false };
+mutex g_mutex;
+
+void processingFunction()
+{
+	if (!g_initialized) {
+		unique_lock lock{ g_mutex };
+		if (!g_initialized) {
+			initializeSharedResources();
+			g_initialized = true;
 		}
 	}
-
-private:
-	int m_id;
-	int m_numIterations;
-	inline static timed_mutex ms_timedMutex;
-};
+	cout << "OK" << endl;
+}
 
 int main()
 {
+	vector<thread> threads;
+
+	for (int i{ 0 }; i < 5; ++i) {
+		threads.push_back(thread{ processingFunction });
+	}
+	for (auto& t : threads) {
+		t.join();
+	}
 }
