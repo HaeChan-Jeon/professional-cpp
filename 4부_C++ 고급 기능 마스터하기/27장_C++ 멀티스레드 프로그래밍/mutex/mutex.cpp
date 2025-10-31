@@ -17,17 +17,15 @@ public:
 	void operator()() const
 	{
 		for (int i { 0 }; i  < m_numIterations; ++i) {
-		/*	osyncstream { cout } << "Counter"
-				<< m_id << " has value " << i << endl;*/
-			
-			osyncstream syncedCout{ cout };
-			syncedCout << m_id << " has value " << i << endl;
+			lock_guard lokc{ ms_mutex };
+			cout << "Counter" << m_id << " has value " << i << endl;
 		}
 	}
 
 private:
 	int m_id;
 	int m_numIterations;
+	inline static mutex ms_mutex;
 };
 
 int main()
