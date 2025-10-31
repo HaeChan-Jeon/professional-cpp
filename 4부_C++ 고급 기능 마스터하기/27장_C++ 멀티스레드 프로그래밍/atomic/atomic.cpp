@@ -1,13 +1,31 @@
 ﻿#include <atomic>
 #include <iostream>
+#include <chrono>
+#include <thread>
+#include <vector>
 
 using namespace std;
 
+void increment(atomic<int>& counter)
+{
+	int result{ 0 };
+	for (int i{ 0 }; i < 100; ++i) {
+		++result;
+		this_thread::sleep_for(1ms);
+	}
+	counter += result;
+}
+
 int main()
 {
-	atomic<int> value{ 10 };
-	cout << "Value = " << value << endl;
-	int fetched{ value.fetch_add(4) };
-	cout << "Fetched = " << fetched << endl;
-	cout << "Value = " << value << endl;
+	atomic<int> counter{ 0 };
+	vector<thread> threads;
+	for (int i { 0 }; i  < 10; ++i) {
+		threads.push_back(thread{ increment, ref(counter) });
+	}
+
+	for (auto& t : threads) {
+		t.join();
+	}
+	cout << "Result = " << counter << endl;
 }
