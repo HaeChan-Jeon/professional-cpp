@@ -1,20 +1,21 @@
 ﻿#include <iostream>
 #include <thread>
+#include <format>
 
 using namespace std;
 
-class Request
+int k;
+thread_local int n;
+
+void threadFunction(int id)
 {
-	public:
-		Request(int id) : m_id{ id } { }
-		void process() { cout << "Processing request " << m_id << endl; }
-	private:
-		int m_id;
-};
+	cout << format("Thread {}: k={}, n={}\n", id, k, n);
+	++n;
+	++k;
+}
 
 int main()
 {
-	Request req{ 100 };
-	thread t{ &Request::process, &req };
-	t.join();
+	thread t1{ threadFunction, 1 }; t1.join();
+	thread t2{ threadFunction, 2 }; t2.join();
 }
