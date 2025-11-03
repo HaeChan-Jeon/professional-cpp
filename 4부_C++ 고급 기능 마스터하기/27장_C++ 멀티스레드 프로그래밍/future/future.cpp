@@ -4,23 +4,19 @@
 
 using namespace std;
 
-void doWork(promise<int> thePromise)
-{
-    // 원하는 작업을 한다.
-    // 최종 결과를 promise에 저장한다.
-    thePromise.set_value(42);
-}
+int CalculateSum(int a, int b) { return a + b; }
 
 int main()
 {
-    // 스레드에 전달할 promise를 생성한다.
-    promise<int> myPromise;
-    // 이 promise에 대한 futre를 가져온다.
-    auto theFuture{ myPromise.get_future() };
-    // 스레드를 생성하고 앞에서 만든 promise를 인수로 전달한다.
-    thread theThread{ doWork, std::move(myPromise) };
+    // packaged_task를 생성해서 CalculateSum을 실행한다.
+    packaged_task<int(int, int)> task{ CalculateSum };
+    // 생성한 packaged_task로부터 CalculatedSum의 결과를 담을 future를 받는다.
+    auto theFuture{ task.get_future() };
+    // 스레드를 생성한 뒤 앞에서 만든 packaged_task를 이동시키고,
+    // 인수를 적절히 전달해서 작업을 수행한다.
+    thread theThread{ move(task), 39, 3 };
 
-    // 원하는 작업을 수행한다.
+    // 다른 작업을 수행한다.
 
     // 최종 결과를 가져온다.
     int result{ theFuture.get() };
