@@ -12,38 +12,25 @@ NameDB::NameDB(string_view nameFile)
 	}
 	string name;
 	while (inputFile >> name) {
-		if (nameExists(name)) {
-			incrementNameCount(name);
-		}
-		else {
+		if (!nameExistsAndIncrement(name)) {
 			addNewName(name);
 		}
 	}
 }
 
-bool NameDB::nameExists(string_view name) const
+bool NameDB::nameExistsAndIncrement(std::string_view name)
 {
-	for (auto& entry : m_names) {
-		if (entry.first == name) {
-			return true;
-		}
+	auto res{ m_names.find(name.data()) };
+	if (res != end(m_names)) {
+		res->second++;
+		return true;
 	}
 	return false;
 }
 
-void NameDB::incrementNameCount(string_view name)
-{
-	for (auto& entry : m_names) {
-		if (entry.first == name) {
-			++entry.second;
-			return;
-		}
-	}
-}
-
 void NameDB::addNewName(string_view name)
 {
-	m_names.push_back(make_pair(name.data(), 1));
+	m_names[name.data()] = 1;
 }
 
 int NameDB::getNameRank(string_view name) const
@@ -64,10 +51,8 @@ int NameDB::getNameRank(string_view name) const
 
 int NameDB::getAbsoluteNumber(string_view name) const
 {
-	for (auto& entry : m_names) {
-		if (entry.first == name) {
-			return entry.second;
-		}
+	auto res{ m_names.find(name.data()) };
+	if (res != end(m_names)) {
+		return res->second;
 	}
-	return -1;
 }
