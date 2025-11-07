@@ -12,25 +12,8 @@ NameDB::NameDB(string_view nameFile)
 	}
 	string name;
 	while (inputFile >> name) {
-		if (!nameExistsAndIncrement(name)) {
-			addNewName(name);
-		}
+		++m_names[name];
 	}
-}
-
-bool NameDB::nameExistsAndIncrement(std::string_view name)
-{
-	auto res{ m_names.find(name.data()) };
-	if (res != end(m_names)) {
-		res->second++;
-		return true;
-	}
-	return false;
-}
-
-void NameDB::addNewName(string_view name)
-{
-	m_names[name.data()] = 1;
 }
 
 int NameDB::getNameRank(string_view name) const

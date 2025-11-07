@@ -12,6 +12,4 @@ public:
 	int getAbsoluteNumber(std::string_view name) const;
 private:
 	std::map<std::string, int> m_names;
-	bool nameExistsAndIncrement(std::string_view name);
-	void addNewName(std::string_view name);
 };
