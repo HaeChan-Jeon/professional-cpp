@@ -1,22 +1,19 @@
 ﻿#include <iostream>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
 int main()
 {
-	ofstream outputFile{ "FileWrite.out" };
-	if (outputFile.fail()) {
-		cerr << "Unable to open file for writing." << endl;
+	ifstream inputFile{ "FileWrite.out" };
+	if (inputFile.fail()) {
+		cerr << "Unable to open file for reading." << endl;
 		return 1;
 	}
-	outputFile << "Hello!" << endl;
-	outputFile.close();
 
-	ofstream appendFile{ "FileWrite.out", ios_base::app };
-	if (appendFile.fail()) {
-		cerr << "Unable to open file for appending." << endl;
-		return 2;
+	string nextToken;
+	while (inputFile >> nextToken) {
+		cout << "Token: " << nextToken << endl;
 	}
-	appendFile << "World!" << endl;
 }
