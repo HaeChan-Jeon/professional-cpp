@@ -1,23 +1,22 @@
-﻿#include <stdexcept>
-#include <iostream>
+﻿#include <iostream>
+#include <fstream>
 
 using namespace std;
 
-void throwIf(bool throwIt)
-{
-	if (throwIt) {
-		throw runtime_error{ "Here's my exception" };
-	}
-}
-
 int main()
 {
-	try {
-		throwIf(false);
-		throwIf(true);
-	}
-	catch (const runtime_error& e) {
-		cerr << "Caught exception: " << e.what() << endl;
+	ofstream outputFile{ "FileWrite.out" };
+	if (outputFile.fail()) {
+		cerr << "Unable to open file for writing." << endl;
 		return 1;
 	}
+	outputFile << "Hello!" << endl;
+	outputFile.close();
+
+	ofstream appendFile{ "FileWrite.out", ios_base::app };
+	if (appendFile.fail()) {
+		cerr << "Unable to open file for appending." << endl;
+		return 2;
+	}
+	appendFile << "World!" << endl;
 }
